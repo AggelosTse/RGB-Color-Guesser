@@ -1,40 +1,18 @@
 from tkinter import *
 from tkinter import ttk
 from random import randint
+import utils
 
-def generate_random_color():
-    # Generate random colors
-    random_red = randint(0, 255)
-    random_green = randint(0, 255)
-    random_blue = randint(0, 255)
-    
-    # Configure color_label_random with the random color
-    random_color = "#{:02x}{:02x}{:02x}".format(random_red, random_green, random_blue)
-    color_label_random.config(bg=random_color)
+tries = 0
+bingo = False
 
-def display_color():
-    # Retrieve slider values when the button is clicked
-    slider_red = slide_red.get()
-    slider_green = slide_green.get()
-    slider_blue = slide_blue.get()
-    
-    # Configure color_label_user with the selected color
-    user_color = "#{:02x}{:02x}{:02x}".format(slider_red, slider_green, slider_blue)
-    color_label_user.config(bg=user_color)
-
-# Window initialization
 window = Tk()
 window.title("Basic Color Combinations")
-window.geometry("1080x800+200+200")
+window.geometry("400x300+200+200")
 
-# Label for displaying random color (left side)
-color_label_random = Label(window, padx=273, pady=1)
-color_label_random.pack(side=LEFT, fill=Y)
+color_label_random = Label(window, padx=100, pady=20)
+color_label_random.pack()
 
-# Generate the initial random color
-generate_random_color()
-
-# Slider creation
 frame1 = Frame(window)
 frame1.pack()
 slide_text1 = ttk.Label(frame1, text="R")
@@ -56,16 +34,62 @@ slide_text3.pack(side=LEFT)
 slide_blue = Scale(frame3, from_=0, to=255, orient=HORIZONTAL)
 slide_blue.pack()
 
-# Label for displaying user-selected color (right side)
-color_label_user = Label(window, padx=273, pady=1)
-color_label_user.pack(side=RIGHT, fill=Y)
+color_label_user = Label(window, padx=100, pady=20)
+color_label_user.pack()
 
-# Button for testing
+distance_label = Label(window, text="Color Distance: ")
+distance_label.pack(pady=10)
+
+result_label = Label(window, text="")
+result_label.pack()
+
+def generate_random_color():
+    global random_red, random_green, random_blue, tries, bingo
+    tries = 0
+    bingo = False
+    random_red = randint(0, 255)
+    random_green = randint(0, 255)
+    random_blue = randint(0, 255)
+    random_color = "#{:02x}{:02x}{:02x}".format(random_red, random_green, random_blue)
+    color_label_random.config(bg=random_color)
+    result_label.config(text="")
+
+def display_color():
+    global tries, bingo
+    if tries < 5 and not bingo:
+        slider_red = slide_red.get()
+        slider_green = slide_green.get()
+        slider_blue = slide_blue.get()
+        user_color = "#{:02x}{:02x}{:02x}".format(slider_red, slider_green, slider_blue)
+        color_label_user.config(bg=user_color)
+        distance = utils.colordistance(slider_red, slider_green, slider_blue, random_red, random_green, random_blue)
+        distance_label.config(text="Color Distance: {:.2f}% Tries: {}".format(distance, tries))
+        tries += 1
+
+        if distance < 10:
+            bingo = True
+            result_label.config(text="Bingo!")
+            # Disable Test and Next buttons if bingo is achieved
+            button_test.config(state=DISABLED)
+            button_next.config(state=DISABLED)
+        
+        if tries == 5 and not bingo:
+            result_label.config(text="You lost")
+            # Disable Test and Next buttons if no bingo is achieved after 5 tries
+            button_test.config(state=DISABLED)
+            button_next.config(state=DISABLED)
+
+def enable_buttons():
+    # Enable Test and Next buttons
+    button_test.config(state=NORMAL)
+    button_next.config(state=NORMAL)
+
 button_test = Button(window, text='Test', bd=5, command=display_color)
-button_test.pack(side=TOP)
+button_test.pack()
 
-# Button for generating a new random color
-button_next = Button(window, text='Next', bd=5, command=generate_random_color)
-button_next.pack(side=TOP)
+button_next = Button(window, text='Next', bd=5, command=lambda: (generate_random_color(), enable_buttons()))
+button_next.pack()
+
+generate_random_color()
 
 window.mainloop()
