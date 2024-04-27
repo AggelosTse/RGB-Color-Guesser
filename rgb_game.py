@@ -92,4 +92,4 @@ button_next.pack()
 
 generate_random_color()
 
-window.mainloop()
+window.mainloop() 
