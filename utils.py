@@ -6,7 +6,8 @@ def colordistance(
 ):
     """takes 3 RGB values from a random color, and 3 from slider's color,
     calculates their distance"""
-    distance = sqrt((sliderred - randomred) ** 2
+    distance = sqrt(
+        (sliderred - randomred) ** 2
         + (slidergreen - randomgreen) ** 2
         + (sliderblue - randomblue) ** 2
     )

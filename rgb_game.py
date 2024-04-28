@@ -24,9 +24,7 @@ def generate_random_color():
     random_red = randint(0, 255)
     random_green = randint(0, 255)
     random_blue = randint(0, 255)
-    random_color = "#{:02x}{:02x}{:02x}".format(
-        random_red, random_green, random_blue
-    )
+    random_color = "#{:02x}{:02x}{:02x}".format(random_red, random_green, random_blue)
     color_label_random.config(bg=random_color)
     result_label.config(text="")
 
@@ -38,9 +36,7 @@ def display_color():
     slider_red = slide_red.get()
     slider_green = slide_green.get()
     slider_blue = slide_blue.get()
-    user_color = "#{:02x}{:02x}{:02x}".format(
-        slider_red, slider_green, slider_blue
-    )
+    user_color = "#{:02x}{:02x}{:02x}".format(slider_red, slider_green, slider_blue)
 
     # Check if the current color is the same as the previous color
     if user_color != previous_color:
@@ -83,7 +79,9 @@ window = Tk()
 window.title("Basic Color Combinations")
 window.geometry("600x400+200+200")  # Increased width to accommodate larger colors
 
-color_label_random = Label(window, padx=200, pady=50, font=("Helvetica", 30))  # Increased padding and font size
+color_label_random = Label(
+    window, padx=200, pady=50, font=("Helvetica", 30)
+)  # Increased padding and font size
 color_label_random.pack()
 
 frame1 = Frame(window)
@@ -107,17 +105,25 @@ slide_text3.pack(side="left")
 slide_blue = Scale(frame3, from_=0, to=255, orient=HORIZONTAL, length=400)
 slide_blue.pack()
 
-color_label_user = Label(window, padx=200, pady=50, font=("Helvetica", 30))  # Increased padding and font size
+color_label_user = Label(
+    window, padx=200, pady=50, font=("Helvetica", 30)
+)  # Increased padding and font size
 color_label_user.pack()
 
-distance_label = Label(window, text="Color Distance: ", font=("Helvetica", 20))  # Increased font size
+distance_label = Label(
+    window, text="Color Distance: ", font=("Helvetica", 20)
+)  # Increased font size
 distance_label.pack(pady=20)
 
 result_label = Label(window, text="", font=("Helvetica", 20))  # Increased font size
 result_label.pack()
 
 button_test = Button(
-    window, text="Test", bd=5, command=display_color, font=("Helvetica", 20)  # Increased font size
+    window,
+    text="Test",
+    bd=5,
+    command=display_color,
+    font=("Helvetica", 20),  # Increased font size
 )
 button_test.pack()
 
